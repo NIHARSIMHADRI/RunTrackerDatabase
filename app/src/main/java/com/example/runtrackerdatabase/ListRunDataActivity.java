@@ -90,6 +90,11 @@ public class ListRunDataActivity extends AppCompatActivity {
 
     }
 
+    public void onClickAddNewRun(View v) {
+        Intent intent = new Intent(ListRunDataActivity.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     /**
      * Customizable toast message
      * @param message

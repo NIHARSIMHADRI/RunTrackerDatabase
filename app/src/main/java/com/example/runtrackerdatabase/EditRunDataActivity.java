@@ -50,6 +50,11 @@ public class EditRunDataActivity extends AppCompatActivity {
                 String item = editName.getText().toString();
                 if(!item.equals("")){
                     mDatabaseHelper.updateName(item, selectedID, selectedName);
+                    toastMessage("Data updated");
+
+                    // Reload listview with refreshed info
+                    Intent intent = new Intent(EditRunDataActivity.this, ListRunDataActivity.class);
+                    startActivity(intent);
                 }
                 else {
                     toastMessage("You must enter a name");
@@ -65,10 +70,20 @@ public class EditRunDataActivity extends AppCompatActivity {
                 mDatabaseHelper.deleteName(selectedID, selectedName);
                 editName.setText("");
                 toastMessage("Removed from database");
+
+                // Reload listview with refreshed info
+                Intent intent = new Intent(EditRunDataActivity.this, ListRunDataActivity.class);
+                startActivity(intent);
             }
         });
 
 
+    }
+
+
+    public void onClickAddNewRun(View v) {
+        Intent intent = new Intent(EditRunDataActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
 

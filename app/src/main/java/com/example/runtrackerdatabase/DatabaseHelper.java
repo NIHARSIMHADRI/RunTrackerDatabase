@@ -2,6 +2,7 @@ package com.example.runtrackerdatabase;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -132,6 +133,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.d(TAG, "deleteName: query " + query);
         Log.d(TAG, "deleteName: Deleting " + name + " from database");
         db.execSQL(query);
+
+
 
     }
 
