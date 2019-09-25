@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 public class EditRunDataActivity extends AppCompatActivity {
 
+    // Constants used for the intent
     public static final String ID = "id";
     public static final String NAME = "name";
 
@@ -35,24 +36,26 @@ public class EditRunDataActivity extends AppCompatActivity {
         mDatabaseHelper = new DatabaseHelper(this);
 
         // get the intent and get the extra info that was put into the intent
-        Log.d(TAG, "onCreate, just established vars");
         Intent receivedIntent = getIntent();
         selectedID = receivedIntent.getIntExtra(ID, -1);    // -1 is default value
         selectedName = receivedIntent.getStringExtra(NAME);
+
         Log.d(TAG, "onCreate, selectedID " + selectedID + " selectedName " + selectedName);
 
         // set the EditText to equal the name they clicked on
+        // Later add extra text fields to allow them to edit all areas of this data entry
         editName.setText(selectedName);
 
         updateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String item = editName.getText().toString();
-                if(!item.equals("")){
+
+                if(!selectedName.equals("")){
                     mDatabaseHelper.updateName(item, selectedID, selectedName);
                     toastMessage("Data updated");
 
-                    // Reload listview with refreshed info
+                    // Reload ListView with refreshed info
                     Intent intent = new Intent(EditRunDataActivity.this, ListRunDataActivity.class);
                     startActivity(intent);
                 }
@@ -71,7 +74,7 @@ public class EditRunDataActivity extends AppCompatActivity {
                 editName.setText("");
                 toastMessage("Removed from database");
 
-                // Reload listview with refreshed info
+                // Reload ListView with refreshed info
                 Intent intent = new Intent(EditRunDataActivity.this, ListRunDataActivity.class);
                 startActivity(intent);
             }
@@ -80,7 +83,7 @@ public class EditRunDataActivity extends AppCompatActivity {
 
     }
 
-
+    // Goes back to screen to add new run data
     public void onClickAddNewRun(View v) {
         Intent intent = new Intent(EditRunDataActivity.this, MainActivity.class);
         startActivity(intent);

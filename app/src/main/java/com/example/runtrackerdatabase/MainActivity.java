@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,37 +38,33 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Create references to all view elements in xml file
+
         btnAdd = (Button) findViewById(R.id.addRunButton);
         btnView = (Button) findViewById(R.id.viewRunButton);
         nameEditText = (EditText) findViewById(R.id.name);
         distanceEditText = (EditText) findViewById(R.id.distance);
         timeEditText = (EditText) findViewById(R.id.time);
 
+        // reference to DatabaseHelper object that will be used
         mDatabaseHelper = new DatabaseHelper(this);
-
-        /*
-
-        btnView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListRunDataActivity.class);
-                startActivity(intent);
-                }
-            }
-        );
-
-*/
     }
 
     public void onClickAddButton(View v) {
+
+        // Gets data the user entered
         String name = nameEditText.getText().toString();
         String distance = distanceEditText.getText().toString();
         String time = timeEditText.getText().toString();
 
+        Log.d(TAG, "onClickAddButton: " + name + ", " + distance + ", " + time );
+
         // Make sure that none of the fields are empty
         if (name.length()!= 0 && distance.length() != 0 && time.length() != 0) {
+
             addData(name, distance, time);
-            //  need to update this to add in the distance and time
+
+            // clears the edit text fields in case more data entry follows
             nameEditText.setText("");
             distanceEditText.setText("");
             timeEditText.setText("");
@@ -87,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             toastMessage("Something went wrong");
     }
 
+    // This method will load the page with the ListView that shows all the values in the database
     public void onClickViewButton(View v) {
         Intent intent = new Intent(MainActivity.this, ListRunDataActivity.class);
         startActivity(intent);

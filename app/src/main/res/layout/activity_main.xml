@@ -19,13 +19,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/distance"
-            android:hint="Enter distance"/>
+            android:hint="Enter distance (miles)"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/time"
-            android:hint="Enter time"/>
+            android:hint="Enter time (hr: min: sec)"/>
 
         <Button
             android:layout_width="125dp"

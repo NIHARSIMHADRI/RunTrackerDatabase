@@ -28,9 +28,11 @@ public class ListRunDataActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_run_data);
 
+        // Gets reference to listview and DatabaseHelper
         mListView = (ListView) findViewById(R.id.runListView);
         mDatabaseHelper = new DatabaseHelper(this);
 
+        // calls method to fill values in the ListView
         populateListView();
     }
 
@@ -40,56 +42,69 @@ public class ListRunDataActivity extends AppCompatActivity {
         // get the data and append to a list
         Cursor data = mDatabaseHelper.getData();
 
-        // Create an arraylist to store all the database elements in
-        // Return back to this and make it an ArrayList of Objects and then pull out all the elements,
-        // call the object constructor, and add the object to the arraylist
+        // Creates an arraylist to store all the String display from database elements
+
+        // TO-DO
+        // Return back to this code and make it an ArrayList of RunEntry Objects and then pull
+        // out all the elements, call the object constructor, and add the object to the Arraylist
+
         ArrayList<String> runData = new ArrayList<>();
         while (data.moveToNext()) {
-            // get the value from the database in column 1
+            // get the value from the database in column 1 (name) and the value in column 2 (dist)
             // then add it to the ArrayList
-            runData.add(data.getString(1));
-            // runData.add(data.getString(1) + ", " + data.getString(2));     // Name of runner
+             runData.add(data.getString(1) + ", " + data.getString(2) + " miles");     // Name of runner
         }
 
-        // Create the list adapter and set the adapter
+        // Create the list adapter and set the adapter to this ArrayList
         ListAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, runData);
         mListView.setAdapter(adapter);
 
-        // set an onItemClickListener to the listview to respond to user interaction
+        // set an onItemClickListener to the Listview to respond to user interaction
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                // get the index of the name that was clicked on
+                // get the index of the entry that was clicked on
                 String name = adapterView.getItemAtPosition(i).toString();
                 Log.d(TAG, "onItemClick: You clicked on " + name);
 
-                Cursor data = mDatabaseHelper.getItemID(name);  // get the unique id associated with that name
+                String shortName = "";
+                // strip off characters after the ',' that aren't the name
+                // once the ArrayList contains RunEntry objects, this won't be needed
+                int loc = name.indexOf(",");
+                if (loc != -1)
+                    shortName = name.substring(0, loc);
+                else
+                    shortName = name;
+
+
+                // get the unique id associated with that name
+                Cursor data = mDatabaseHelper.getItemID(shortName);
                 int itemID = -1;
 
                 while (data.moveToNext()) {
                     itemID = data.getInt(0);
                 }
 
-                // if data is returned, log it.  If not, send an error message via a toast
+                // if data is returned, Log it and then create an Intent to edit the entry with this name and id
+                // If not found, send an error message via a toast
 
                 if (itemID > -1) {
                     Log.d(TAG, "onItemClick: The ID is: " + itemID);
                     Intent intent = new Intent(ListRunDataActivity.this, EditRunDataActivity.class);
                     intent.putExtra(EditRunDataActivity.ID, itemID);
-                    intent.putExtra(EditRunDataActivity.NAME, name);
+                    intent.putExtra(EditRunDataActivity.NAME, shortName);
                     startActivity(intent);
                 }
                 else {
                     toastMessage("No ID associated with that name");
                 }
-
-
             }
         });
 
 
     }
 
+    // Takes user back to home screen to enter a new run
     public void onClickAddNewRun(View v) {
         Intent intent = new Intent(ListRunDataActivity.this, MainActivity.class);
         startActivity(intent);

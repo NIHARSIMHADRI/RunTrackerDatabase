@@ -11,31 +11,27 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
+    private static final String DB_NAME = "runstats";
     private static final String TABLE_NAME = "run_table";
-    private static final String COL0 = "ID";        // unique ID for each element
-    private static final String COL1 = "name";      // name of runner
-    private static final String COL2 = "distance";  // distance of run ex:  (3.5 miles)
-    private static final String COL3 = "time";      // time of run          (0:34:12 means 34 min 12 sec)
+    private static final String COL0 = "_id";        // unique ID for each element
+    private static final String COL1 = "NAME";      // name of runner
+    private static final String COL2 = "DISTANCE";  // distance of run ex:  (3.5 miles)
+    private static final String COL3 = "RUN_TIME";      // time of run          (0:34:12 means 34 min 12 sec)
 
 
     public DatabaseHelper(Context context) {
-        super(context, TABLE_NAME, null, 1);
+        super(context, DB_NAME, null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL1 + " TEXT)";
+        String createTable = "CREATE TABLE "+ TABLE_NAME + " (" + COL0 + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+               + COL1 + " TEXT, "
+               + COL2 + " TEXT, "
+               + COL3 + " TEXT);";
 
-
-      /*
-      STILL NEED TO ADD COL2, COL3 TO TABLE!  This isn't working for some reason
-
-      String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL1 + " TEXT, " + COL2 + " TEXT, " + COL3 + " TEXT)";
-
-         */
+        Log.d(TAG, "onCreate: " + createTable);
 
         db.execSQL(createTable);
     }
@@ -63,11 +59,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //this will help us write to the database.  Think of put as putting this element into this colomn of db
         ContentValues contentValues = new ContentValues();
         contentValues.put(COL1, name);
-       // contentValues.put(COL2, distance);
-        //contentValues.put(COL3, time);
+        contentValues.put(COL2, distance);
+        contentValues.put(COL3, time);
 
         // this will display info to help us in Logcat to see where we are
-       // Log.d(TAG, "addData: Adding " + name + " " + distance + " " + time + " to " + TABLE_NAME);
+       Log.d(TAG, "addData: Adding " + name + " " + distance + " " + time + " to " + TABLE_NAME);
 
         // insert value into table.  Returns -1 if not successful
         long result = db.insert(TABLE_NAME, null, contentValues);
